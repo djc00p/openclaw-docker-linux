@@ -7,7 +7,7 @@ Complete setup files for running OpenClaw in Docker.
 ```yaml
 services:
   openclaw:
-    image: ghcr.io/openclaw/openclaw:latest
+    image: ghcr.io/openclaw/openclaw:v1
     container_name: openclaw_agent
     restart: unless-stopped
     environment:
@@ -36,11 +36,12 @@ services:
       # - /home/YOUR_USERNAME/.npm-global:/home/YOUR_USERNAME/.npm-global
       # - /home/YOUR_USERNAME/.config/gh:/home/node/.config/gh
     ports:
-      - "18789:18789"
+      # Bind to localhost only for security; use Tailscale for remote access
+      - "127.0.0.1:18789:18789"
     command: ["bash", "/home/node/.openclaw/workspace/scripts/start.sh"]
 
   openclaw-cli:
-    image: ghcr.io/openclaw/openclaw:latest
+    image: ghcr.io/openclaw/openclaw:v1
     profiles: ["cli"]
     volumes:
       - ~/.openclaw:/home/node/.openclaw
@@ -77,6 +78,7 @@ GITHUB_TOKEN=
 ```
 
 Generate a secure gateway token:
+
 ```bash
 openssl rand -hex 32
 ```
@@ -91,7 +93,7 @@ Inside `~/.openclaw/openclaw.json`, ensure:
 {
   "gateway": {
     "mode": "local",
-    "bind": "lan",
+    "bind": "loopback",
     "port": 18789,
     "allowedOrigins": [
       "http://localhost:18789",
@@ -115,6 +117,7 @@ chmod +x docker-setup.sh
 ```
 
 **Available commands:**
+
 ```bash
 ./docker-setup.sh start          # Pull latest image, start container, auto-fix config
 ./docker-setup.sh stop           # Stop container
@@ -129,6 +132,7 @@ chmod +x docker-setup.sh
 ```
 
 The `start` command automatically:
+
 - Pulls the latest image
 - Checks for missing `gateway.mode` and runs `doctor --fix` if needed
 - Displays local and Tailscale access URLs with your token
@@ -144,6 +148,7 @@ sudo chown -R 1000:1000 ~/.openclaw ~/openclaw
 ```
 
 On macOS, permissions usually work out of the box. If not:
+
 ```bash
 chmod -R 755 ~/.openclaw ~/openclaw
 ```
@@ -153,14 +158,17 @@ chmod -R 755 ~/.openclaw ~/openclaw
 ## Telegram Pairing
 
 After connecting your Telegram bot:
+
 1. Message your bot from Telegram
 2. You'll receive a pairing code
 3. Approve it:
+
 ```bash
 docker-compose run --rm openclaw-cli pairing approve telegram YOUR_CODE
 ```
 
 Or use the management script:
+
 ```bash
 ./docker-setup.sh approve_telagram
 ```
@@ -189,9 +197,11 @@ tailscale ip -4
 ```
 
 **Preferred — use MagicDNS hostname (HTTPS, no port needed):**
+
 ```bash
 ./docker-setup.sh tailscale  # Starts tailscale serve proxy
 ```
+
 Then access at: `https://YOUR_MACHINE_NAME.YOUR_TAILNET.ts.net?token=YOUR_TOKEN`
 
 This is more secure than raw IP (HTTPS via Tailscale's TLS certs) and more stable (hostname doesn't change if your IP does).

@@ -257,7 +257,7 @@ setup_tailscale() {
     if ! command -v tailscale &> /dev/null; then
         print_error "Tailscale not installed"
         echo ""
-        echo "Install with: brew install tailscale"
+        echo "Install with: sudo apt install tailscale"
         echo "Then run: sudo tailscale up"
         exit 1
     fi
@@ -278,8 +278,11 @@ setup_tailscale() {
     TAILSCALE_IP=$(tailscale ip -4)
     TOKEN=$(grep OPENCLAW_GATEWAY_TOKEN .env | cut -d '=' -f2)
     
+    MASKED_TOKEN="${TOKEN:0:4}...[redacted]"
+
     echo "Access from other devices:"
-    echo "  http://$TAILSCALE_IP:18789?token=$TOKEN"
+    echo "  http://$TAILSCALE_IP:18789?token=$MASKED_TOKEN"
+    echo "  (token masked — full token in .env)"
 }
 
 # Show help
