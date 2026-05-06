@@ -93,6 +93,7 @@ docker-compose run --rm openclaw-cli pairing list
 3. Restart: `docker-compose restart openclaw`
 4. Message your bot — you'll get a pairing code
 5. Approve it:
+
    ```bash
    docker-compose run --rm openclaw-cli pairing approve telegram YOUR_CODE
    ```
