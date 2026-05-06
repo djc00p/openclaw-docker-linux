@@ -2,7 +2,7 @@
 
 [![ClawHub Skill](https://img.shields.io/badge/ClawHub-Skill-blue)](https://clawhub.ai/djc00p/openclaw-docker-linux) [![Agent Skill](https://img.shields.io/badge/Agent-Skill-blue)](#) [![Platform: Linux](https://img.shields.io/badge/Platform-Linux-green)](#) [![Tech: Docker](https://img.shields.io/badge/Tech-Docker-blue)](#) [![Type: Infrastructure](https://img.shields.io/badge/Type-Infrastructure-orange)](#) [![Security: Secure](https://img.shields.io/badge/Security-Secure-brightgreen)](#) [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 
-**The authoritative guide for deploying OpenClaw in a containerized environment on Linux, featuring secure remote access via Tailscale.**
+**Guide for deploying OpenClaw in a containerized environment on Linux, featuring secure remote access via Tailscale.**
 
 This repository provides the configuration, orchestration, and security protocols required to run a production-ready OpenClaw instance using Docker and Docker Compose. This setup is specifically optimized for Linux (Ubuntu 24.04+) and integrates seamlessly with Tailscale for secure, encrypted remote access without exposing ports to the public internet.
 
@@ -109,7 +109,3 @@ The container uses a "Mirror Mapping" strategy. The host's configuration directo
 | **Approve Telegram Bot** | `docker-compose run --rm openclaw-cli pairing approve telegram <CODE>` |
 | **Full System Reset** | `docker-compose down -v` (Warning: Deletes all volumes) |
 | **Check System Health** | `openclaw doctor` |
-
----
-
-**Standardized by the OpenClaw DevOps Team.**
