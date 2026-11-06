@@ -1,3 +1,4 @@
+
 # OpenClaw Docker - Simple Setup (Using Official Image)
 
 This is the SIMPLE way to run OpenClaw using the official pre-built Docker image.
@@ -29,6 +30,10 @@ OPENCLAW_GATEWAY_TOKEN=your-secure-random-token-here
 # DISCORD_BOT_TOKEN=
 # SLACK_BOT_TOKEN=
 EOF
+
+# Lock it down before adding real secrets — .env holds your gateway token
+# and model API keys.
+chmod 600 .env
 ```
 
 ### 3. Create `docker-compose.yml`
@@ -42,7 +47,10 @@ See `references/docker-config.md` for the full template.
 mkdir -p ~/.openclaw ~/openclaw/workspace
 
 # On Linux, set ownership to UID 1000 (the 'node' user in the container)
-sudo chown -R 1000:1000 ~/.openclaw ~/openclaw
+# Verify the uid first - 1000 is not your uid on every machine.
+id -u; id -g
+# Then use YOUR actual ids (shown above), not a guessed 1000:
+sudo chown -R "$(id -u):$(id -g)" ~/.openclaw ~/openclaw
 
 # On Mac, the default user is already compatible
 ```
@@ -93,7 +101,6 @@ docker-compose run --rm openclaw-cli pairing list
 3. Restart: `docker-compose restart openclaw`
 4. Message your bot — you'll get a pairing code
 5. Approve it:
-
    ```bash
    docker-compose run --rm openclaw-cli pairing approve telegram YOUR_CODE
    ```
